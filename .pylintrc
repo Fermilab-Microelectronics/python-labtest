@@ -1,0 +1,4 @@
+[BASIC]
+disable=
+    C0114, # missing-module-docstring
+good-names-rgxs=^[_a-z][_a-z0-9]?$

@@ -1,0 +1,23 @@
+[project]
+name = "python-sample-project"
+version = "0.1.0"
+description = "Python Sample Project"
+readme = "README.md"
+license = {file = "LICENSE"}
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "coverage",
+    "isort",
+    "isort[colors]",
+    "mypy",
+    "pylint",
+    "pytest",
+]
+
+[tool.pylint.MASTER]
+fail-under = "10"
+output-format = "parseable"
+msg-template = "{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}"
