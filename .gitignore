@@ -1,10 +1,9 @@
+# Default
+/.*/
 
 # Python
 __pycache__
-.coverage*
-.mypy_cache
-.nox
-.ptest_cache
 *.egg-info
+.coverage*
 coverage*
 htmlcov
