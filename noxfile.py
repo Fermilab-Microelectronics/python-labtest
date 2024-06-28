@@ -1,13 +1,13 @@
 """
 noxfile.py Configuration file for Nox
 """
+
 # pylint: disable=import-error
 import os
 
 import nox
 
 nox.options.reuse_existing_virtualenvs = True
-# nox.options.sessions = ["style", "check"]
 
 
 @nox.session(tags=["check"])
@@ -43,7 +43,7 @@ def typecheck(session):
     session.run("mypy", "src", "test")
 
 
-@nox.session
+@nox.session(default=False)
 def cli(session):
     """Runs CLI"""
     session.install("-e", ".[dev]")
