@@ -33,7 +33,7 @@ def test(session):
     """Runs tests"""
     session.install("-e", ".[dev]")
     session.run("coverage", "run", "--source=src,test", "-m", "pytest", "-sv")
-    session.run("coverage", "report")
+    session.run("coverage", "report", "--fail-under=100")
 
 
 @nox.session(default=False)
