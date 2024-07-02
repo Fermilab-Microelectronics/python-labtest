@@ -1,4 +1,5 @@
 [BASIC]
 disable=
     C0114, # missing-module-docstring
+    R1705, # no-else-return
 good-names-rgxs=^[_a-z][_a-z0-9]?$
