@@ -1,7 +1,11 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
 [project]
-name = "python-sample-project"
+name = "sunrock-testing"
 version = "0.1.0"
-description = "Python Sample Project"
+description = "Python code used for testing the SUNROCK chip."
 readme = "README.md"
 license = {file = "LICENSE"}
 dependencies = []
@@ -16,6 +20,13 @@ dev = [
     "pylint",
     "pytest",
 ]
+
+[project.scripts]
+labtest = "labtest.labtest:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = false
 
 [tool.pylint.MASTER]
 fail-under = "10"
