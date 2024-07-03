@@ -32,7 +32,9 @@ def style(session):
 def test(session):
     """Runs tests"""
     session.install("-e", ".[dev]")
-    session.run("coverage", "run", "--source=src,test", "-m", "pytest", "-sv")
+    session.run(
+        "coverage", "run", "--source=src,test", "-m", "pytest", "-sv", *session.posargs
+    )
     session.run("coverage", "report", "--fail-under=100")
 
 
