@@ -15,6 +15,7 @@ def register(registry: Registry = Registry()) -> Callable:
 
     Returns:
         Callable: Returns the registered function
+
     """
 
     def inner_wrapper(func: Callable) -> Callable:
@@ -27,6 +28,7 @@ def register(registry: Registry = Registry()) -> Callable:
 
         Returns:
             Callable: Returns the registered function
+
         """
         return registry.register(func)
 

@@ -23,6 +23,7 @@ class Registry:
 
         Returns:
             Registry: Return a registry instance
+
         """
         if is_singleton:
             if cls._instance is None:

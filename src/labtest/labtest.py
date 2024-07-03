@@ -9,6 +9,7 @@ def main():
 
     Raises:
         ValueError: If supplied labtest name is not a registered test name
+
     """
     args = parse_args(sys.argv[1:])
     Registry().execute(args.name, *args.args)
@@ -25,6 +26,7 @@ def parse_args(args):
 
     Raises:
         ArgumentError: If supplied arguments are invalid.
+
     """
     parser = argparse.ArgumentParser(description="Command Line Interface")
     parser.add_argument("name", help="The labtest to execute")
