@@ -35,7 +35,7 @@ def test(session):
     session.run(
         "coverage", "run", "--source=src,test", "-m", "pytest", "-sv", *session.posargs
     )
-    session.run("coverage", "report", "--fail-under=100")
+    session.run("coverage", "report", "--fail-under=100", "--show-missing")
 
 
 @nox.session(default=False)
