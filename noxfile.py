@@ -4,10 +4,28 @@ noxfile.py Configuration file for Nox
 
 # pylint: disable=import-error
 import os
+import shutil
 
 import nox
 
 nox.options.reuse_existing_virtualenvs = True
+nox.options.error_on_external_run = True
+nox.options.envdir = ".nox"
+
+
+@nox.session(default=False)
+def clean(session):
+    """Clean up build artifacts."""
+    envdir = os.path.dirname(session.virtualenv.location)
+    session.log(f"Removing build artifacts from '{envdir}'")
+    shutil.rmtree(envdir, ignore_errors=True)
+
+
+@nox.session(default=False)
+def cli(session):
+    """Runs CLI"""
+    session.install("-e", ".[dev]")
+    session.run(*session.posargs)
 
 
 @nox.session(tags=["check"])
@@ -36,10 +54,3 @@ def test(session):
         "coverage", "run", "--source=src,test", "-m", "pytest", "-sv", *session.posargs
     )
     session.run("coverage", "report", "--fail-under=100", "--show-missing")
-
-
-@nox.session(default=False)
-def cli(session):
-    """Runs CLI"""
-    session.install("-e", ".[dev]")
-    session.run(*session.posargs)
