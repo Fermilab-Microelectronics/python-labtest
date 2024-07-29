@@ -64,7 +64,9 @@ def _create_subparser_list(subparsers) -> None:
 
     # pylint: disable-next=W0613
     def _command_list(*, registry: Registry = Registry(), args) -> None:
-        for n in registry.labtests or ["INFO: Did not find any registered functions"]:
+        for n in sorted(registry.labtests) or [
+            "INFO: Did not find any registered functions"
+        ]:
             print(n)
 
     parser = subparsers.add_parser("list", help="list command help")
