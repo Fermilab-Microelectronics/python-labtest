@@ -34,8 +34,9 @@ class Registry:
 
     def __init__(self, *, is_singleton: bool = True):
         """Initializes Registry with empty lab test registry"""
-        self.labtest_funcs: Dict[str, Callable] = {}
         self._is_singleton: bool = is_singleton
+        if not hasattr(self, "labtest_funcs"):
+            self.labtest_funcs: Dict[str, Callable] = {}
 
     @property
     def labtests(self) -> List[str]:

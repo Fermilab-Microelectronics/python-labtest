@@ -30,3 +30,21 @@ def test_registry_labtests_two_functions():
         f"{__name__}:mock_test_registry_labtests_two_functions_alpha",
         f"{__name__}:mock_test_registry_labtests_two_functions_beta",
     ]
+
+
+def test_registry_labtests_singleton(monkeypatch):
+
+    def mock_test_registry_labtests_singleton():
+        """mock function"""
+
+    registry = Registry(is_singleton=False)
+
+    def __mock_new__(cls, *, is_singleton: bool = True):
+        return registry
+
+    monkeypatch.setattr(Registry, "__new__", __mock_new__)
+    Registry().register(mock_test_registry_labtests_singleton)
+    assert len(Registry().labtests) == 1
+    assert sorted(Registry().labtests) == [
+        f"{__name__}:mock_test_registry_labtests_singleton",
+    ]
