@@ -19,6 +19,7 @@ dev = [
     "mypy",
     "pylint",
     "pytest",
+    "pytest-clarity",
 ]
 
 [project.scripts]
