@@ -10,11 +10,9 @@ MOCK_SOURCE = "test/labtest/test_cli/mock_source"
 
 
 def test_subcommand_list_source_empty(monkeypatch, capsys):
-    registry = Registry(is_singleton=False)
-
     class MockRegistry(Registry):
         def __new__(cls, *, is_singleton: bool = True):
-            return registry
+            """Mock Constructor"""
 
     monkeypatch.setattr(labtest.decorator, "Registry", MockRegistry)
 
