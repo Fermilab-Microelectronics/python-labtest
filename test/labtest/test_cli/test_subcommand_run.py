@@ -27,6 +27,6 @@ def test_subcommand_run_name_good(monkeypatch):
         m.setattr(
             sys,
             "argv",
-            ["main", "run", f"{__name__}:mock_test_subcommand_run_name_good"],
+            ["main", "run", f"{__file__}:mock_test_subcommand_run_name_good"],
         )
         assert main(registry=registry) is mock_test_subcommand_run_name_good

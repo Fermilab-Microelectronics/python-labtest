@@ -62,14 +62,11 @@ def parse_args(args: List[str]):
 def _create_subparser_run(subparsers) -> None:
 
     def _command_run(*, registry: Registry = Registry(), args) -> Callable:
-        return registry.execute(args.name, *args.args)
+        return registry.execute(args.name)
 
     parser = subparsers.add_parser("run", help="run command help")
     parser.set_defaults(func=_command_run)
     parser.add_argument("name", help="Registered labtest to execute")
-    parser.add_argument(
-        "args", nargs=argparse.REMAINDER, help="Arguments for the labtest"
-    )
 
 
 def _create_subparser_list(subparsers) -> None:

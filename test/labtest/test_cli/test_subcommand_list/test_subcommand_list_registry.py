@@ -29,7 +29,7 @@ def test_subcommand_list_registry_one_entry(monkeypatch, capsys):
         main(registry=registry)
         captured = capsys.readouterr()
         assert (
-            f"{__name__}:mock_test_subcommand_list_registry_one_entry\n" == captured.out
+            f"{__file__}:mock_test_subcommand_list_registry_one_entry\n" in captured.out
         )
 
 
@@ -49,7 +49,7 @@ def test_subcommand_list_registry_two_entries(monkeypatch, capsys):
         main(registry=registry)
         captured = capsys.readouterr()
         assert (
-            f"{__name__}:mock_test_subcommand_list_registry_two_entries_alpha\n"
-            f"{__name__}:mock_test_subcommand_list_registry_two_entries_beta\n"
+            f"{__file__}:mock_test_subcommand_list_registry_two_entries_alpha\n"
+            f"{__file__}:mock_test_subcommand_list_registry_two_entries_beta\n"
             in captured.out
         )

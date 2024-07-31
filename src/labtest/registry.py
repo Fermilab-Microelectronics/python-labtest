@@ -56,8 +56,12 @@ class Registry:
             func: Function to register a function as a lab test.
 
         """
-        filename = os.path.realpath(inspect.getsourcefile(func))
-        self.labtest_funcs[f"{filename}:{func.__name__}"] = func
+        sourcefile = inspect.getsourcefile(func)
+        if sourcefile:
+            filename = os.path.realpath(sourcefile)
+            self.labtest_funcs[f"{filename}:{func.__name__}"] = func
+        else:  # pragma: no cover
+            raise ValueError(f"Cannot find source file for {func.__name__}")
         return func
 
     def execute(self, name: str, *args: Any, **kwargs: Any) -> Callable:
