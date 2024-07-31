@@ -1,4 +1,6 @@
 import argparse
+import importlib.util
+import os
 import sys
 from typing import Callable, List
 
@@ -19,6 +21,8 @@ def main(*, registry: Registry = Registry()) -> Callable:
 
     """
     args = parse_args(sys.argv[1:])
+    for p in args.source or []:
+        _import_directory(p)
     return args.func(registry=registry, args=args)
 
 
@@ -43,6 +47,14 @@ def parse_args(args: List[str]):
 
     _create_subparser_list(subparsers)
     _create_subparser_run(subparsers)
+    for _, p in subparsers.choices.items():
+        p.add_argument(
+            "--source",
+            help="Common top-level parameter",
+            metavar="source",
+            action="append",
+            required=False,
+        )
 
     return parser.parse_args(args)
 
@@ -71,3 +83,18 @@ def _create_subparser_list(subparsers) -> None:
 
     parser = subparsers.add_parser("list", help="list command help")
     parser.set_defaults(func=_command_list)
+
+
+def _import_directory(directory):
+    for root, _, files in os.walk(directory):
+        for file in files:
+            if file.endswith(".py") and not file.startswith("__"):
+                module_name = os.path.split(file)[-1].strip(".py")
+                module_path = os.path.join(root, file)
+                module_spec = importlib.util.spec_from_file_location(
+                    module_name, module_path
+                )
+                module = importlib.util.module_from_spec(module_spec)
+                module_spec.loader.exec_module(module)
+
+                globals()[module_name] = module

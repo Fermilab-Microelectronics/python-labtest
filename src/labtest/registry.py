@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import inspect
+import os
 from typing import Any, Callable, Dict, List, Union
 
 
@@ -55,9 +56,8 @@ class Registry:
             func: Function to register a function as a lab test.
 
         """
-        module = inspect.getmodule(func)
-        if module:
-            self.labtest_funcs[f"{module.__name__}:{func.__name__}"] = func
+        filename = os.path.realpath(inspect.getsourcefile(func))
+        self.labtest_funcs[f"{filename}:{func.__name__}"] = func
         return func
 
     def execute(self, name: str, *args: Any, **kwargs: Any) -> Callable:
