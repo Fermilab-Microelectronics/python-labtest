@@ -34,7 +34,7 @@ def test_decorator_labtest_two_functions():
 
 
 def test_decorator_labtest_no_argument(monkeypatch):
-    registry = Registry(is_singleton=True)
+    registry = Registry(is_singleton=False)
 
     class MockRegistry(Registry):
         def __new__(cls, *, is_singleton: bool = True):
