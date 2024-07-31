@@ -31,3 +31,22 @@ def test_decorator_labtest_two_functions():
         f"{__name__}:mock_test_decorator_labtest_two_functions_alpha",
         f"{__name__}:mock_test_decorator_labtest_two_functions_beta",
     ]
+
+
+def test_decorator_labtest_no_argument(monkeypatch):
+    registry = Registry(is_singleton=True)
+
+    class MockRegistry(Registry):
+        def __new__(cls, *, is_singleton: bool = True):
+            return registry
+
+    monkeypatch.setattr(labtest.decorator, "Registry", MockRegistry)
+
+    @labtest.register
+    def mock_test_decorator_labtest_no_argument():
+        """mock function"""
+
+    assert len(registry.labtests) == 1
+    assert sorted(registry.labtests) == [
+        f"{__name__}:mock_test_decorator_labtest_no_argument",
+    ]
