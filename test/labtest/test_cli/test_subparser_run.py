@@ -17,12 +17,18 @@ def test_subparser_run_command(parse_args_run):
     assert e.value.code == 0
 
 
+def test_subparser_run_no_args(parse_args_run):
+    assert parse_args_run([""]).name == ""
+
+
 def test_subparser_run_name(parse_args_run):
     assert parse_args_run(["name"]).name == "name"
 
 
-def test_subparser_run_missing_name(parse_args_run):
-    assert parse_args_run([""]).name == ""
+def test_subparser_list_name_with_source(parse_args_list):
+    args = parse_args_list(["name", "--source", "path"])
+    assert args.name == "name"
+    assert args.source == "path"
 
 
 def test_subparser_run_one_arg(parse_args_run):
