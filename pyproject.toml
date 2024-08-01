@@ -28,8 +28,3 @@ labtest = "labtest.labtest:main"
 [tool.setuptools.packages.find]
 where = ["src"]
 namespaces = false
-
-[tool.pylint.MASTER]
-fail-under = "10"
-output-format = "parseable"
-msg-template = "{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}"

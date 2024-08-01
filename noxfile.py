@@ -38,10 +38,14 @@ def lint(session):
     session.run(
         "pylint",
         "test",
-        "--disable=missing-function-docstring",
-        "--disable=missing-class-docstring",
-        "--disable=missing-module-docstring",
         "--disable=duplicate-code",
+        "--disable=missing-class-docstring",
+        "--disable=missing-function-docstring",
+        "--disable=missing-module-docstring",
+        "--disable=missing-param-doc",
+        "--disable=missing-return-doc",
+        "--disable=missing-return-type-doc",
+        "--disable=missing-yield-doc",
     )
     session.run("mypy", "src", "test")
 
