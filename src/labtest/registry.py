@@ -70,6 +70,8 @@ class Registry:
         Args:
             name: The name of the registered lab test expressed as
                 "<modeule_name>:<func_name>".
+            *args: Positional arguments passed to the registered function.
+            **kwargs: Keyword arguments passed to the registered function.
 
         Raises:
             ValueError: If name doesn't match a registered lab test.

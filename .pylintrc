@@ -1,3 +1,6 @@
+[MAIN]
+load-plugins=pylint.extensions.docparams
+
 [BASIC]
 disable=
     C0114, # missing-module-docstring
