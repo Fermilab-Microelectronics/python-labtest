@@ -1,4 +1,5 @@
-from typing import Callable, overload
+from collections.abc import Callable
+from typing import overload
 
 from labtest.registry import Registry
 

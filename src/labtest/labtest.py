@@ -2,7 +2,7 @@ import argparse
 import importlib.util
 import os
 import sys
-from typing import Callable, List
+from collections.abc import Callable
 
 from labtest.registry import Registry
 
@@ -26,11 +26,11 @@ def main(*, registry: Registry = Registry()) -> Callable:
     return args.func(registry=registry, args=args)
 
 
-def parse_args(args: List[str]):
+def parse_args(args: list[str]):
     """Parsers the labtest CLI arguments
 
     Args:
-        args: List of arguments to parse.
+        args: list of arguments to parse.
 
     Returns:
         Namespace: Returns arguments and argument values as namespace attributes.

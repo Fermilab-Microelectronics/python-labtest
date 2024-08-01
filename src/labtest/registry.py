@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import inspect
 import os
-from typing import Any, Callable, Dict, List, Union
+from collections.abc import Callable
+from typing import Any
 
 
 class Registry:
@@ -13,7 +14,7 @@ class Registry:
     permit only a single instance that manages the tests.
     """
 
-    _instance: Union[None, Registry] = None
+    _instance: None | Registry = None
 
     def __new__(cls, *, is_singleton: bool = True) -> Registry:
         """Returns the singleton registry instance
@@ -34,13 +35,19 @@ class Registry:
             return super().__new__(cls)
 
     def __init__(self, *, is_singleton: bool = True):
-        """Initializes Registry with empty lab test registry"""
+        """Initializes Registry with empty lab test registry
+
+        Args:
+            is_singleton: Controls whether to return the singleton instance or to
+                create a new instance Defaults to True.
+
+        """
         self._is_singleton: bool = is_singleton
         if not hasattr(self, "labtest_funcs"):
-            self.labtest_funcs: Dict[str, Callable] = {}
+            self.labtest_funcs: dict[str, Callable] = {}
 
     @property
-    def labtests(self) -> List[str]:
+    def labtests(self) -> list[str]:
         """Returns a list of the registered lab tests."""
         return list(self.labtest_funcs)
 
@@ -55,16 +62,21 @@ class Registry:
         Args:
             func: Function to register a function as a lab test.
 
+        Returns:
+            Callable: Returns the registered function.
+
+        Raises:
+            ValueError: If function source file cannot be determined.
+
         """
-        sourcefile = inspect.getsourcefile(func)
-        if sourcefile:
+        if sourcefile := inspect.getsourcefile(func):
             filename = os.path.realpath(sourcefile)
             self.labtest_funcs[f"{filename}:{func.__name__}"] = func
         else:  # pragma: no cover
             raise ValueError(f"Cannot find source file for {func.__name__}")
         return func
 
-    def execute(self, name: str, *args: Any, **kwargs: Any) -> Callable:
+    def execute(self, name: str, *args: Any, **kwargs: Any) -> Any:
         """Executes a registered lab test
 
         Args:
@@ -72,6 +84,9 @@ class Registry:
                 "<modeule_name>:<func_name>".
             *args: Positional arguments passed to the registered function.
             **kwargs: Keyword arguments passed to the registered function.
+
+        Returns:
+            Any: Returns the result of the function.
 
         Raises:
             ValueError: If name doesn't match a registered lab test.
