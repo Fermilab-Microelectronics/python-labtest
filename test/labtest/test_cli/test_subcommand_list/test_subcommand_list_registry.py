@@ -1,7 +1,5 @@
 import sys
 
-import pytest
-
 import labtest
 from labtest.labtest import main
 from labtest.registry import Registry

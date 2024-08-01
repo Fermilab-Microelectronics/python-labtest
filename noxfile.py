@@ -35,6 +35,14 @@ def lint(session):
     session.run("black", "--check", "--diff", "--color", ".")
     session.run("isort", "--check", "--diff", "--color", "--profile", "black", ".")
     session.run("pylint", "src")
+    session.run(
+        "pylint",
+        "test",
+        "--disable=missing-function-docstring",
+        "--disable=missing-class-docstring",
+        "--disable=missing-module-docstring",
+        "--disable=duplicate-code",
+    )
     session.run("mypy", "src", "test")
 
 

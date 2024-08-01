@@ -39,6 +39,7 @@ def test_registry_labtests_singleton(monkeypatch):
 
     registry = Registry(is_singleton=False)
 
+    # pylint: disable-next=unused-argument
     def __mock_new__(cls, *, is_singleton: bool = True):
         return registry
 

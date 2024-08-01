@@ -1,8 +1,5 @@
 import pathlib
-import re
 import sys
-
-import pytest
 
 import labtest
 from labtest.registry import Registry

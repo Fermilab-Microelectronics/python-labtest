@@ -1,7 +1,4 @@
-import importlib.util
-import os
 import pathlib
-import re
 import sys
 
 import pytest
@@ -14,7 +11,7 @@ MOCK_SOURCE_RELATIVE = "test/labtest/test_cli/mock_source"
 MOCK_SOURCE_ABSOLUTE = pathlib.Path(__file__).parents[4] / MOCK_SOURCE_RELATIVE
 
 
-def test_subcommand_run_source_empty(monkeypatch, capsys):
+def test_subcommand_run_source_empty(monkeypatch):
     registry = Registry(is_singleton=False)
 
     with monkeypatch.context() as m:

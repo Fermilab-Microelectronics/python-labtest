@@ -3,12 +3,12 @@ import pytest
 from labtest.labtest import parse_args
 
 
-@pytest.fixture
-def parse_args_list():
-    def _parse_args_list(args):
+@pytest.fixture(name="parse_args_list")
+def _parse_args_list():
+    def __parse_args_list(args):
         return parse_args(["list"] + args)
 
-    return _parse_args_list
+    return __parse_args_list
 
 
 def test_subparser_list_help(parse_args_list):
