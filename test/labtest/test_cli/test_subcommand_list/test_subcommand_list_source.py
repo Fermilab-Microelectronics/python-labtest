@@ -1,3 +1,4 @@
+import pathlib
 import re
 import sys
 
@@ -6,7 +7,8 @@ import pytest
 import labtest
 from labtest.registry import Registry
 
-MOCK_SOURCE = "test/labtest/test_cli/mock_source"
+MOCK_SOURCE_RELATIVE = "test/labtest/test_cli/mock_source"
+MOCK_SOURCE_ABSOLUTE = pathlib.Path(__file__).parents[4] / MOCK_SOURCE_RELATIVE
 
 
 def test_subcommand_list_source_empty(monkeypatch, capsys):
@@ -17,7 +19,7 @@ def test_subcommand_list_source_empty(monkeypatch, capsys):
     monkeypatch.setattr(labtest.decorator, "Registry", MockRegistry)
 
     with monkeypatch.context() as m:
-        m.setattr(sys, "argv", ["main", "list", "--source", f"{MOCK_SOURCE}/empty"])
+        m.setattr(sys, "argv", ["main", "list", "--source", "empty"])
         labtest.labtest.main()
         captured = capsys.readouterr()
         assert "INFO: Did not find any registered functions" in captured.out
@@ -33,17 +35,17 @@ def test_subcommand_list_source_one_path(monkeypatch, capsys):
     monkeypatch.setattr(labtest.decorator, "Registry", MockRegistry)
 
     with monkeypatch.context() as m:
-        m.setattr(sys, "argv", ["main", "list", "--source", f"{MOCK_SOURCE}"])
+        m.setattr(sys, "argv", ["main", "list", "--source", f"{MOCK_SOURCE_RELATIVE}"])
         labtest.labtest.main(registry=registry)
         captured = capsys.readouterr()
-        assert re.fullmatch(
-            f".*?{MOCK_SOURCE}/alpha/alpha.py:labtest_alpha_one\n"
-            f".*?{MOCK_SOURCE}/alpha/alpha.py:labtest_alpha_two\n"
-            f".*?{MOCK_SOURCE}/alpha/beta/beta.py:labtest_beta_one\n"
-            f".*?{MOCK_SOURCE}/alpha/beta/beta.py:labtest_beta_two\n"
-            f".*?{MOCK_SOURCE}/alpha/gamma/gamma.py:labtest_gamma_one\n"
-            f".*?{MOCK_SOURCE}/alpha/gamma/gamma.py:labtest_gamma_two\n",
-            captured.out,
+
+        assert (
+            f"{MOCK_SOURCE_ABSOLUTE}/alpha/alpha.py:labtest_alpha\n"
+            f"{MOCK_SOURCE_ABSOLUTE}/alpha/beta/beta.py:labtest_beta_one\n"
+            f"{MOCK_SOURCE_ABSOLUTE}/alpha/beta/beta.py:labtest_beta_two\n"
+            f"{MOCK_SOURCE_ABSOLUTE}/alpha/gamma/gamma.py:labtest_gamma_one\n"
+            f"{MOCK_SOURCE_ABSOLUTE}/alpha/gamma/gamma.py:labtest_gamma_two\n"
+            in captured.out
         )
 
 
@@ -64,17 +66,17 @@ def test_subcommand_list_source_two_paths(monkeypatch, capsys):
                 "main",
                 "list",
                 "--source",
-                f"{MOCK_SOURCE}/alpha/beta",
+                f"{MOCK_SOURCE_RELATIVE}/alpha/beta",
                 "--source",
-                f"{MOCK_SOURCE}/alpha/gamma",
+                f"{MOCK_SOURCE_RELATIVE}/alpha/gamma",
             ],
         )
         labtest.labtest.main(registry=registry)
         captured = capsys.readouterr()
-        assert re.fullmatch(
-            f".*?{MOCK_SOURCE}/alpha/beta/beta.py:labtest_beta_one\n"
-            f".*?{MOCK_SOURCE}/alpha/beta/beta.py:labtest_beta_two\n"
-            f".*?{MOCK_SOURCE}/alpha/gamma/gamma.py:labtest_gamma_one\n"
-            f".*?{MOCK_SOURCE}/alpha/gamma/gamma.py:labtest_gamma_two\n",
-            captured.out,
+        assert (
+            f"{MOCK_SOURCE_ABSOLUTE}/alpha/beta/beta.py:labtest_beta_one\n"
+            f"{MOCK_SOURCE_ABSOLUTE}/alpha/beta/beta.py:labtest_beta_two\n"
+            f"{MOCK_SOURCE_ABSOLUTE}/alpha/gamma/gamma.py:labtest_gamma_one\n"
+            f"{MOCK_SOURCE_ABSOLUTE}/alpha/gamma/gamma.py:labtest_gamma_two\n"
+            in captured.out
         )
