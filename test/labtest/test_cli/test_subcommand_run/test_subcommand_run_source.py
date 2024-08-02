@@ -24,7 +24,7 @@ def test_subcommand_run_source_alpha(monkeypatch):
     registry = Registry(is_singleton=False)
 
     class MockRegistry(Registry):
-        def __new__(cls, *, is_singleton: bool = True):
+        def __new__(cls, *, is_singleton: bool = True):  # noqa: ARG003
             return registry
 
     monkeypatch.setattr(labtest.decorator, "Registry", MockRegistry)

@@ -1,3 +1,5 @@
+"""This module provides the decorator for registering labtests."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, overload

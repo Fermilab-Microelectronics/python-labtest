@@ -1,3 +1,1 @@
-from .decorator import register
-
-__all__ = ["register"]
+from .decorator import register  # noqa: F401

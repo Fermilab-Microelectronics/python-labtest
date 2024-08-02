@@ -1,4 +1,4 @@
-# ruff: noqa: ANN401
+"""This module creates the labtest CLI."""
 
 from __future__ import annotations
 
@@ -10,12 +10,14 @@ from argparse import Namespace as Args
 from importlib.abc import Loader
 from importlib.machinery import ModuleSpec
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, cast
 
 from labtest.registry import Registry
 
+# ruff: noqa: ANN401
 if TYPE_CHECKING:
     from collections.abc import Callable
+    from typing import Any
 
 
 def main(*, registry: Registry | None = None) -> Callable:
@@ -53,11 +55,15 @@ def parse_args(args: list[str]) -> Args:
 
     """
     parser = argparse.ArgumentParser(
-        description="Command line interface for running tests",
+        description="Command line interface for running tests"
     )
     subparsers = parser.add_subparsers()
     subparsers.required = True
+    _create_subparsers(subparsers)
+    return parser.parse_args(args)
 
+
+def _create_subparsers(subparsers: Any) -> None:
     _create_subparser_list(subparsers)
     _create_subparser_run(subparsers)
     for p in subparsers.choices.values():
@@ -69,8 +75,6 @@ def parse_args(args: list[str]) -> Args:
             required=False,
         )
 
-    return parser.parse_args(args)
-
 
 def _create_subparser_run(subparsers: Any) -> None:
 
@@ -79,19 +83,16 @@ def _create_subparser_run(subparsers: Any) -> None:
 
     parser = subparsers.add_parser("run", help="run command help")
     parser.set_defaults(func=_command_run)
-
     parser.add_argument("name", help="Registered labtest to execute")
 
 
 def _create_subparser_list(subparsers: Any) -> None:
 
     def _command_list(
-        *,
-        registry: Registry,
-        args: Args,  # pylint: disable=W0613  # noqa: ARG001
+        *, registry: Registry, args: Args  # pylint: disable=W0613  # noqa: ARG001
     ) -> None:
         for n in sorted(registry.labtests) or [
-            "INFO: Did not find any registered functions",
+            "INFO: Did not find any registered functions"
         ]:
             print(n)  # noqa: T201
 
@@ -107,10 +108,7 @@ def _import_directory(directory: str) -> None:
                 module_path = Path(root) / file
                 module_spec = cast(
                     ModuleSpec,
-                    importlib.util.spec_from_file_location(
-                        module_name,
-                        module_path,
-                    ),
+                    importlib.util.spec_from_file_location(module_name, module_path),
                 )
                 module = importlib.util.module_from_spec(module_spec)
                 if isinstance(module_spec.loader, Loader):

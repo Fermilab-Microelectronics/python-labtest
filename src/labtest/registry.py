@@ -1,15 +1,17 @@
-# ruff: noqa: ANN401
+"""This module provides the Registry class."""
 
 from __future__ import annotations
 
 import inspect
 import os
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
-from typing_extensions import Self
-
+# ruff: noqa: ANN401
 if TYPE_CHECKING:
     from collections.abc import Callable
+    from typing import Any
+
+    from typing_extensions import Self
 
 
 class Registry:

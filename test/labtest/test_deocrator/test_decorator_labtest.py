@@ -11,7 +11,7 @@ def test_decorator_labtest_one_function():
 
     assert len(registry.labtests) == 1
     assert sorted(registry.labtests) == [
-        f"{__file__}:mock_test_decorator_labtest_one_function",
+        f"{__file__}:mock_test_decorator_labtest_one_function"
     ]
 
 
@@ -37,7 +37,7 @@ def test_decorator_labtest_no_argument(monkeypatch):
     registry = Registry(is_singleton=False)
 
     class MockRegistry(Registry):
-        def __new__(cls, *, is_singleton: bool = True):
+        def __new__(cls, *, is_singleton: bool = True):  # noqa: ARG003
             return registry
 
     monkeypatch.setattr(labtest.decorator, "Registry", MockRegistry)
@@ -48,5 +48,5 @@ def test_decorator_labtest_no_argument(monkeypatch):
 
     assert len(registry.labtests) == 1
     assert sorted(registry.labtests) == [
-        f"{__file__}:mock_test_decorator_labtest_no_argument",
+        f"{__file__}:mock_test_decorator_labtest_no_argument"
     ]
