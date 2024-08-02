@@ -30,10 +30,24 @@ labtest = "labtest.labtest:main"
 where = ["src"]
 namespaces = false
 
+[tool.black]
+skip_magic_trailing_comma = true
+
 [tool.coverage.report]
 exclude_also = [
     "if TYPE_CHECKING:",
 ]
 
+[tool.pylint.format]
+max-line-length = "88"
+
+[tool.pylint.messages_control]
+disable = "C0330, C0326"
+
 [tool.ruff]
-lint.pydocstyle.convention = "google"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+pydocstyle.convention = "google"
+select = ["ALL"]
+ignore = ["COM812", "D104", "RET505"]

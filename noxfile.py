@@ -34,8 +34,9 @@ def lint(session):
     session.install("-e", ".[dev]")
     session.run("black", "--check", "--diff", "--color", ".")
     session.run("isort", "--check", "--diff", "--color", "--profile", "black", ".")
+    session.run("ruff", "check", "src")
+    session.run("ruff", "check", "test", "--ignore=D,ANN,S101,PLR2004")
     session.run("pylint", "src")
-    session.run("ruff", "check", "src", "--ignore=D100,D104,RET505", "--select=ALL")
     session.run(
         "pylint",
         "test",
