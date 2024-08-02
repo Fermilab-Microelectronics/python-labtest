@@ -1,9 +1,15 @@
+# ruff: noqa: ANN401
+
 from __future__ import annotations
 
 import inspect
 import os
-from collections.abc import Callable
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+from typing_extensions import Self
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 class Registry:
@@ -14,17 +20,17 @@ class Registry:
     permit only a single instance that manages the tests.
     """
 
-    _instance: None | Registry = None
+    _instance: None | Self = None
 
-    def __new__(cls, *, is_singleton: bool = True) -> Registry:
-        """Returns the singleton registry instance
+    def __new__(cls, *, is_singleton: bool = True) -> Self:
+        """Returns the singleton registry instance.
 
         Args:
             is_singleton: Controls whether to return the singleton instance or to
                 create a new instance Defaults to True.
 
         Returns:
-            Registry: Return a registry instance
+            Self: Return a registry instance
 
         """
         if is_singleton:
@@ -34,8 +40,8 @@ class Registry:
         else:
             return super().__new__(cls)
 
-    def __init__(self, *, is_singleton: bool = True):
-        """Initializes Registry with empty lab test registry
+    def __init__(self, *, is_singleton: bool = True) -> None:
+        """Initializes Registry with empty lab test registry.
 
         Args:
             is_singleton: Controls whether to return the singleton instance or to
@@ -57,7 +63,7 @@ class Registry:
         return self._is_singleton
 
     def register(self, func: Callable) -> Callable:
-        """Registers a function as lab test
+        """Registers a function as lab test.
 
         Args:
             func: Function to register a function as a lab test.
@@ -73,11 +79,12 @@ class Registry:
             filename = os.path.realpath(sourcefile)
             self.labtest_funcs[f"{filename}:{func.__name__}"] = func
         else:  # pragma: no cover
-            raise ValueError(f"Cannot find source file for {func.__name__}")
+            msg = f"Cannot find source file for {func.__name__}"
+            raise ValueError(msg)
         return func
 
     def execute(self, name: str, *args: Any, **kwargs: Any) -> Any:
-        """Executes a registered lab test
+        """Executes a registered lab test.
 
         Args:
             name: The name of the registered lab test expressed as
@@ -95,4 +102,5 @@ class Registry:
         if name in self.labtest_funcs:
             return self.labtest_funcs[name](*args, **kwargs)
         else:
-            raise ValueError(f"Not a registered lab test: {name}")
+            msg = f"Not a registered lab test: {name}"
+            raise ValueError(msg)

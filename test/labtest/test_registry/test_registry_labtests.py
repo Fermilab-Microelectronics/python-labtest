@@ -40,10 +40,10 @@ def test_registry_labtests_singleton(monkeypatch):
     registry = Registry(is_singleton=False)
 
     # pylint: disable-next=unused-argument
-    def __mock_new__(cls, *, is_singleton: bool = True):
+    def mock_new(cls, *, is_singleton: bool = True):
         return registry
 
-    monkeypatch.setattr(Registry, "__new__", __mock_new__)
+    monkeypatch.setattr(Registry, "__new__", mock_new)
     Registry().register(mock_test_registry_labtests_singleton)
     assert len(Registry().labtests) == 1
     assert sorted(Registry().labtests) == [

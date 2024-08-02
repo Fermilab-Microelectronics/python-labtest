@@ -1,7 +1,11 @@
-from collections.abc import Callable
-from typing import overload
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, overload
 
 from labtest.registry import Registry
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 @overload
