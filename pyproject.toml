@@ -20,6 +20,7 @@ dev = [
     "pylint",
     "pytest",
     "pytest-clarity",
+    "ruff",
 ]
 
 [project.scripts]
@@ -28,3 +29,11 @@ labtest = "labtest.labtest:main"
 [tool.setuptools.packages.find]
 where = ["src"]
 namespaces = false
+
+[tool.coverage.report]
+exclude_also = [
+    "if TYPE_CHECKING:",
+]
+
+[tool.ruff]
+lint.pydocstyle.convention = "google"
