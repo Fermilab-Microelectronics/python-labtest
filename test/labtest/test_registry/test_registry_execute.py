@@ -17,7 +17,7 @@ def test_registry_execute_no_args():
     registry = Registry(is_singleton=False)
     registry.register(mock_test_registry_execute_no_args)
     assert (
-        registry.execute(f"{__name__}:mock_test_registry_execute_no_args")
+        registry.execute(f"{__file__}:mock_test_registry_execute_no_args")
         == "mock_test_registry_execute_no_args"
     )
 
@@ -30,5 +30,5 @@ def test_registry_execute_with_args():
     registry = Registry(is_singleton=False)
     registry.register(mock_test_registry_execute_with_args)
     assert registry.execute(
-        f"{__name__}:mock_test_registry_execute_with_args", "a", "b"
+        f"{__file__}:mock_test_registry_execute_with_args", "a", "b"
     ) == ("a", "b")

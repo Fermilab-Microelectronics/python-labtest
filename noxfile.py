@@ -4,10 +4,28 @@ noxfile.py Configuration file for Nox
 
 # pylint: disable=import-error
 import os
+import shutil
 
 import nox
 
 nox.options.reuse_existing_virtualenvs = True
+nox.options.error_on_external_run = True
+nox.options.envdir = ".nox"
+
+
+@nox.session(default=False)
+def clean(session):
+    """Clean up build artifacts."""
+    envdir = os.path.dirname(session.virtualenv.location)
+    session.log(f"Removing build artifacts from '{envdir}'")
+    shutil.rmtree(envdir, ignore_errors=True)
+
+
+@nox.session(default=False)
+def cli(session):
+    """Runs CLI"""
+    session.install("-e", ".[dev]")
+    session.run(*session.posargs)
 
 
 @nox.session(tags=["check"])
@@ -16,7 +34,22 @@ def lint(session):
     session.install("-e", ".[dev]")
     session.run("black", "--check", "--diff", "--color", ".")
     session.run("isort", "--check", "--diff", "--color", "--profile", "black", ".")
+    session.run("pyprojectsort", "--diff")
+    session.run("ruff", "check", "src")
+    session.run("ruff", "check", "test", "--ignore=D,ANN,S101,PLR2004")
     session.run("pylint", "src")
+    session.run(
+        "pylint",
+        "test",
+        "--disable=duplicate-code",
+        "--disable=missing-class-docstring",
+        "--disable=missing-function-docstring",
+        "--disable=missing-module-docstring",
+        "--disable=missing-param-doc",
+        "--disable=missing-return-doc",
+        "--disable=missing-return-type-doc",
+        "--disable=missing-yield-doc",
+    )
     session.run("mypy", "src", "test")
 
 
@@ -26,6 +59,7 @@ def style(session):
     session.install("-e", ".[dev]")
     session.run("black", "--verbose", ".")
     session.run("isort", "--profile", "black", ".")
+    session.run("pyprojectsort")
 
 
 @nox.session(tags=["check"])
@@ -33,13 +67,13 @@ def test(session):
     """Runs tests"""
     session.install("-e", ".[dev]")
     session.run(
-        "coverage", "run", "--source=src,test", "-m", "pytest", "-sv", *session.posargs
+        "coverage",
+        "run",
+        "--source=src,test",
+        "-m",
+        "pytest",
+        "--capture=sys",
+        "-v",
+        *session.posargs,
     )
     session.run("coverage", "report", "--fail-under=100", "--show-missing")
-
-
-@nox.session(default=False)
-def cli(session):
-    """Runs CLI"""
-    session.install("-e", ".[dev]")
-    session.run(*session.posargs)

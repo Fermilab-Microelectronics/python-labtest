@@ -1,9 +1,24 @@
-from typing import Callable
+"""This module provides the decorator for registering labtests."""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, overload
 
 from labtest.registry import Registry
 
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
-def register(registry: Registry = Registry()) -> Callable:
+
+@overload
+def register(arg: Registry) -> Callable[[Callable], Callable]: ...
+
+
+@overload
+def register(arg: Callable) -> Callable: ...
+
+
+def register(arg: Callable | Registry) -> Callable:
     """Decorator for registering functions as lab tests.
 
     Registered lab test are internally hashed using the following representation
@@ -11,15 +26,35 @@ def register(registry: Registry = Registry()) -> Callable:
     the function using the inspect module.
 
     Args:
-        registry: Registry object used to register lab test. Defaults to Registry().
+        arg: Either a registry object or the function to decorate.
 
     Returns:
         Callable: Returns the registered function
 
+    Examples:
+        The register decorator can be use both with and without a registry argument. In
+        the case where the decorator is called without a registry argument, the default
+        singleton registry is used.
+
+            @labtest.register
+            def labtest_func():
+                ...
+
+
+        In the case where a registry argument is supplied, the function is registered to
+        the supplied registry object
+
+            registry=Registry(is_singleton=False)
+            @labtest.register
+            def labtest_func():
+                ...
+
     """
+    if callable(arg):
+        return register(Registry())(arg)
 
     def inner_wrapper(func: Callable) -> Callable:
-        """Inner wrapper for decorator a function.
+        """Inner register wrapper for decorating a function.
 
         Registers the function with the registry provided by the parent function.
 
@@ -30,6 +65,6 @@ def register(registry: Registry = Registry()) -> Callable:
             Callable: Returns the registered function
 
         """
-        return registry.register(func)
+        return arg.register(func)
 
     return inner_wrapper
