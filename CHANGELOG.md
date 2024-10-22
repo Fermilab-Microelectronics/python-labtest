@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Created CLI sub-commands for run and list.
 - The Nox virtual environment directory can now be set using the environment variable
   `NOX_ENVDIR`.
+- Added py.typed marker file for mypy.
 ### Changed
 - Renamed project to `labtest`.
 ### Deprecated
