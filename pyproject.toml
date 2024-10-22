@@ -36,6 +36,7 @@ skip_magic_trailing_comma = true
 
 [tool.coverage.report]
 exclude_also = [
+    "@overload",
     "if TYPE_CHECKING:",
 ]
 
