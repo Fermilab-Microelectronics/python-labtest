@@ -10,7 +10,7 @@ import nox
 
 nox.options.reuse_existing_virtualenvs = True
 nox.options.error_on_external_run = True
-nox.options.envdir = ".nox"
+nox.options.envdir = os.environ.get("NOX_ENVDIR", ".nox")
 
 
 @nox.session(default=False)
