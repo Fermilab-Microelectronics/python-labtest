@@ -17,10 +17,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - YYYY-MM-DD
 ### Added
 - Created CLI sub-commands for run and list.
+- The Nox virtual environment directory can now be set using the environment variable
+  `NOX_ENVDIR`.
 ### Changed
 - Renamed project to `labtest`.
 ### Deprecated
 ### Fixed
 - The nox session `cli` no longer runs by default and generates an error due to lack
   of command line arguments.
+- The nox session `clean` no longer requires the creation of a virtual environment.
+- Changed the GitHub workflow badge from the `python-sample` repo to the correct
+  `python-labtest` repo.
 ### Security

@@ -77,7 +77,6 @@ def _create_subparsers(subparsers: Any) -> None:
 
 
 def _create_subparser_run(subparsers: Any) -> None:
-
     def _command_run(*, registry: Registry, args: Args) -> Callable:
         return registry.execute(args.name)
 
@@ -87,7 +86,6 @@ def _create_subparser_run(subparsers: Any) -> None:
 
 
 def _create_subparser_list(subparsers: Any) -> None:
-
     def _command_list(
         *, registry: Registry, args: Args  # pylint: disable=W0613  # noqa: ARG001
     ) -> None:

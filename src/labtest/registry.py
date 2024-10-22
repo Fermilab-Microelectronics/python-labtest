@@ -24,7 +24,7 @@ class Registry:
 
     _instance: None | Self = None
 
-    def __new__(cls, *, is_singleton: bool = True) -> Self:
+    def __new__(cls, *, is_singleton: bool = True) -> Self | Registry:
         """Returns the singleton registry instance.
 
         Args:
@@ -77,7 +77,8 @@ class Registry:
             ValueError: If function source file cannot be determined.
 
         """
-        if sourcefile := inspect.getsourcefile(func):
+        sourcefile = inspect.getsourcefile(func)
+        if sourcefile:
             filename = os.path.realpath(sourcefile)
             self.labtest_funcs[f"{filename}:{func.__name__}"] = func
         else:  # pragma: no cover

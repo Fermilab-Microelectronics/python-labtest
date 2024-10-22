@@ -10,7 +10,6 @@ def test_registry_execute_empty_registry():
 
 
 def test_registry_execute_no_args():
-
     def mock_test_registry_execute_no_args():
         return "mock_test_registry_execute_no_args"
 
@@ -23,7 +22,6 @@ def test_registry_execute_no_args():
 
 
 def test_registry_execute_with_args():
-
     def mock_test_registry_execute_with_args(*args):
         return args
 

@@ -10,15 +10,14 @@ import nox
 
 nox.options.reuse_existing_virtualenvs = True
 nox.options.error_on_external_run = True
-nox.options.envdir = ".nox"
+nox.options.envdir = os.environ.get("NOX_ENVDIR", ".nox")
 
 
-@nox.session(default=False)
+@nox.session(default=False, python=False)
 def clean(session):
     """Clean up build artifacts."""
-    envdir = os.path.dirname(session.virtualenv.location)
-    session.log(f"Removing build artifacts from '{envdir}'")
-    shutil.rmtree(envdir, ignore_errors=True)
+    session.log(f"Removing build artifacts from '{nox.options.envdir}'")
+    shutil.rmtree(nox.options.envdir, ignore_errors=True)
 
 
 @nox.session(default=False)

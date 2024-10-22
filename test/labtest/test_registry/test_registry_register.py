@@ -2,7 +2,6 @@ from labtest.registry import Registry
 
 
 def test_registry_register_one_function():
-
     def mock_test_registry_register_one_function():
         """mock function"""
 
@@ -14,7 +13,6 @@ def test_registry_register_one_function():
 
 
 def test_registry_register_two_functions():
-
     def mock_test_registry_register_two_functions_alpha():
         """mock function"""
 
