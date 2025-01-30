@@ -3,11 +3,12 @@ import pytest
 from labtest.labtest import parse_args
 
 
-# ruff: noqa: FIX002 TD003
-# TODO(jeff): once python is upgraded past 3.7 fix this to use capsys
-def test_parse_args_command_missing():
-    with pytest.raises(TypeError):
+def test_parse_args_command_missing(capsys):
+    with pytest.raises(SystemExit) as e:
         parse_args([])
+    captured = capsys.readouterr()
+    assert "the following arguments are required:" in captured.err
+    assert e.value.code == 2
 
 
 def test_parse_args_command_bad(capsys):

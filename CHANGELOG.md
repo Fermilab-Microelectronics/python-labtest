@@ -17,11 +17,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - YYYY-MM-DD
 ### Added
 - Created CLI sub-commands for run and list.
-- The Nox virtual environment directory can now be set using the environment variable
-  `NOX_ENVDIR`.
 - Added py.typed marker file for mypy.
+- The nox installation directory can now be overriden through the enviroment variable
+  `NOX_ENVDIR`. Defaults to `.nox` when environment variable does not exist.
+- Add flake8 lint checks.
+- Disabled missing type documentation when linting test files with pylint.
+- Update the minimum python version to 3.9.
+- The GitHub workflow now testing against python versions 3.9 through 3.13.
 ### Changed
 - Renamed project to `labtest`.
+- Pylint now uses all availabe extentions by default.
 ### Deprecated
 ### Fixed
 - The nox session `cli` no longer runs by default and generates an error due to lack

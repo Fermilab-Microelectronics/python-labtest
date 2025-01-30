@@ -24,7 +24,8 @@ def clean(session):
 def cli(session):
     """Runs CLI"""
     session.install("-e", ".[dev]")
-    session.run(*session.posargs)
+    if session.posargs:
+        session.run(*session.posargs)
 
 
 @nox.session(tags=["check"])
@@ -32,11 +33,12 @@ def lint(session):
     """Runs lint checks"""
     session.install("-e", ".[dev]")
     session.run("black", "--check", "--diff", "--color", ".")
+    session.run("flake8", "src", "test")
     session.run("isort", "--check", "--diff", "--color", "--profile", "black", ".")
     session.run("pyprojectsort", "--diff")
     session.run("ruff", "check", "src")
     session.run("ruff", "check", "test", "--ignore=D,ANN,S101,PLR2004")
-    session.run("pylint", "src")
+    session.run("pylint", "--enable-all-extensions", "src")
     session.run(
         "pylint",
         "test",
@@ -47,6 +49,7 @@ def lint(session):
         "--disable=missing-param-doc",
         "--disable=missing-return-doc",
         "--disable=missing-return-type-doc",
+        "--disable=missing-type-doc",
         "--disable=missing-yield-doc",
     )
     session.run("mypy", "src", "test")

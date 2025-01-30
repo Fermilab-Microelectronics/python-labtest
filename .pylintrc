@@ -1,17 +1,7 @@
 [MAIN]
 fail-under = 10
 load-plugins =
-    pylint.extensions.check_elif,
-    pylint.extensions.code_style,
-    pylint.extensions.comparison_placement,
     pylint.extensions.docparams,
-    pylint.extensions.docstyle,
-    pylint.extensions.dunder,
-    pylint.extensions.empty_comment,
-    pylint.extensions.eq_without_hash,
-    pylint.extensions.mccabe,
-    pylint.extensions.private_import,
-    pylint.extensions.typing,
 msg-template = '{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}'
 output-format = parseable
 
