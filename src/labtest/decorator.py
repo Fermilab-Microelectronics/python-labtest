@@ -11,13 +11,11 @@ if TYPE_CHECKING:
 
 
 @overload
-def register(arg: Registry) -> Callable[[Callable], Callable]:
-    ...
+def register(arg: Registry) -> Callable[[Callable], Callable]: ...
 
 
 @overload
-def register(arg: Callable) -> Callable:
-    ...
+def register(arg: Callable) -> Callable: ...
 
 
 def register(arg: Callable | Registry) -> Callable:
