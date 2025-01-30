@@ -77,8 +77,7 @@ class Registry:
             ValueError: If function source file cannot be determined.
 
         """
-        sourcefile = inspect.getsourcefile(func)
-        if sourcefile:
+        if sourcefile := inspect.getsourcefile(func):
             filename = os.path.realpath(sourcefile)
             self.labtest_funcs[f"{filename}:{func.__name__}"] = func
         else:  # pragma: no cover
