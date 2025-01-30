@@ -21,8 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The nox installation directory can now be overriden through the enviroment variable
   `NOX_ENVDIR`. Defaults to `.nox` when environment variable does not exist.
 - Add flake8 lint checks.
+- Disabled missing type documentation when linting test files with pylint.
 ### Changed
 - Renamed project to `labtest`.
+- Pylint now uses all availabe extentions by default.
 ### Deprecated
 ### Fixed
 - The nox session `cli` no longer runs by default and generates an error due to lack
