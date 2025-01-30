@@ -17,8 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - YYYY-MM-DD
 ### Added
 - Created CLI sub-commands for run and list.
-- The Nox virtual environment directory can now be set using the environment variable
-  `NOX_ENVDIR`.
+- The nox installation directory can now be overriden through the enviroment variable
+  `NOX_ENVDIR`. Defaults to `.nox` when environment variable does not exist.
 - Added py.typed marker file for mypy.
 ### Changed
 - Renamed project to `labtest`.
