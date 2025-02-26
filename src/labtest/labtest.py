@@ -6,7 +6,6 @@ import argparse
 import importlib.util
 import os
 import sys
-from argparse import Namespace as Args
 from importlib.abc import Loader
 from importlib.machinery import ModuleSpec
 from pathlib import Path
@@ -16,6 +15,7 @@ from labtest.registry import Registry
 
 # ruff: noqa: ANN401
 if TYPE_CHECKING:
+    from argparse import Namespace as Args
     from collections.abc import Callable
     from typing import Any
 
