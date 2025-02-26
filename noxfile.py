@@ -8,9 +8,17 @@ import shutil
 
 import nox
 
-nox.options.reuse_existing_virtualenvs = True
 nox.options.error_on_external_run = True
 nox.options.envdir = os.environ.get("NOX_ENVDIR", ".nox")
+
+
+@nox.session(reuse_venv=True, default=False)
+def build_venv(session):
+    """Builds the virtual environment."""
+    session.install("-e", ".[dev]")
+    if session.posargs:
+        for task in session.posargs[0]:
+            task(session, *session.posargs[1:])
 
 
 @nox.session(default=False, python=False)
@@ -20,54 +28,70 @@ def clean(session):
     shutil.rmtree(nox.options.envdir, ignore_errors=True)
 
 
-@nox.session(default=False)
+@nox.session(reuse_venv=True, default=False)
 def cli(session):
-    """Runs CLI"""
-    session.install("-e", ".[dev]")
-    if session.posargs:
-        session.run(*session.posargs)
+    """Runs the CLI."""
+    session.notify("build_venv", posargs=([_cli], *session.posargs))
 
 
-@nox.session(tags=["check"])
+@nox.session(reuse_venv=True)
 def lint(session):
-    """Runs lint checks"""
-    session.install("-e", ".[dev]")
+    """Runs lint checks."""
+    session.notify("build_venv", posargs=([_lint], *session.posargs))
+
+
+@nox.session(reuse_venv=True)
+def style(session):
+    """Runs linters and fixers."""
+    session.notify("build_venv", posargs=([_style], *session.posargs))
+
+
+@nox.session(reuse_venv=True)
+def test(session):
+    """Runs tests."""
+    session.notify("build_venv", posargs=([_test], *session.posargs))
+
+
+def _cli(session, *args):
+    """Executes the environment command for the CLI."""
+    if session.posargs:
+        session.run(*args)
+
+
+def _lint(session):
+    """Executes the environment command for the lint checks."""
     session.run("black", "--check", "--diff", "--color", ".")
     session.run("flake8", "src", "test")
     session.run("isort", "--check", "--diff", "--color", "--profile", "black", ".")
     session.run("pyprojectsort", "--diff")
     session.run("ruff", "check", "src")
-    session.run("ruff", "check", "test", "--ignore=D,ANN,S101,PLR2004")
+    session.run("ruff", "check", "test", "--ignore=D,S101,PLR2004")
     session.run("pylint", "--enable-all-extensions", "src")
     session.run(
         "pylint",
+        "--enable-all-extensions",
         "test",
         "--disable=duplicate-code",
+        "--disable=magic-value-comparison",
         "--disable=missing-class-docstring",
         "--disable=missing-function-docstring",
         "--disable=missing-module-docstring",
         "--disable=missing-param-doc",
         "--disable=missing-return-doc",
-        "--disable=missing-return-type-doc",
-        "--disable=missing-type-doc",
         "--disable=missing-yield-doc",
     )
     session.run("mypy", "src", "test")
 
 
-@nox.session(tags=["fix"])
-def style(session):
-    """Runs linters and fixers"""
-    session.install("-e", ".[dev]")
+def _style(session):
+    """Executes the environment command for the stylers and fixers."""
     session.run("black", "--verbose", ".")
     session.run("isort", "--profile", "black", ".")
     session.run("pyprojectsort")
 
 
-@nox.session(tags=["check"])
-def test(session):
-    """Runs tests"""
-    session.install("-e", ".[dev]")
+def _test(session, *args):
+    """Executes the environment command for the tests."""
     session.run(
         "coverage",
         "run",
@@ -76,6 +100,6 @@ def test(session):
         "pytest",
         "--capture=sys",
         "-v",
-        *session.posargs,
+        *args,
     )
     session.run("coverage", "report", "--fail-under=100", "--show-missing")
