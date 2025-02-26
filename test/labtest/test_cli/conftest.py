@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 
 @pytest.fixture(name="mock_registry")
-def _mock_registry(monkeypatch) -> Callable:
+def _mock_registry(monkeypatch: pytest.MonkeyPatch) -> Callable:
     registry = Registry(is_singleton=False)
 
     @contextmanager
@@ -28,10 +28,10 @@ def _mock_registry(monkeypatch) -> Callable:
 
 
 @pytest.fixture(name="mock_sys_argv")
-def _mock_sys_argv(monkeypatch) -> Callable:
+def _mock_sys_argv(monkeypatch: pytest.MonkeyPatch) -> Callable:
 
     @contextmanager
-    def _mock_sys_argv_context(*args) -> Generator:
+    def _mock_sys_argv_context(*args: str) -> Generator:
         with monkeypatch.context() as m:
             m.setattr(sys, "argv", args)
             yield

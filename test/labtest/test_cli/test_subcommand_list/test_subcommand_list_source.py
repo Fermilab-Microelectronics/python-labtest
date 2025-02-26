@@ -1,19 +1,31 @@
+from __future__ import annotations
+
 import pathlib
+from typing import TYPE_CHECKING
 
 import labtest
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    import pytest
 
 MOCK_SOURCE_RELATIVE = "test/labtest/test_cli/mock_source"
 MOCK_SOURCE_ABSOLUTE = pathlib.Path(__file__).parents[4] / MOCK_SOURCE_RELATIVE
 
 
-def test_subcommand_list_source_empty(mock_sys_argv, mock_registry, capsys):
+def test_subcommand_list_source_empty(
+    mock_sys_argv: Callable, mock_registry: Callable, capsys: pytest.CaptureFixture[str]
+) -> None:
     with mock_registry(), mock_sys_argv("main", "list", "--source", "empty"):
         labtest.labtest.main()
         captured = capsys.readouterr()
         assert "INFO: Did not find any registered functions" in captured.out
 
 
-def test_subcommand_list_source_one_path(mock_sys_argv, mock_registry, capsys):
+def test_subcommand_list_source_one_path(
+    mock_sys_argv: Callable, mock_registry: Callable, capsys: pytest.CaptureFixture[str]
+) -> None:
     with (
         mock_registry(),
         mock_sys_argv("main", "list", "--source", f"{MOCK_SOURCE_RELATIVE}"),
@@ -30,7 +42,9 @@ def test_subcommand_list_source_one_path(mock_sys_argv, mock_registry, capsys):
         )
 
 
-def test_subcommand_list_source_two_paths(mock_sys_argv, mock_registry, capsys):
+def test_subcommand_list_source_two_paths(
+    mock_sys_argv: Callable, mock_registry: Callable, capsys: pytest.CaptureFixture[str]
+) -> None:
     with (
         mock_registry(),
         mock_sys_argv(
