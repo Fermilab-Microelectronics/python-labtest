@@ -1,29 +1,24 @@
-import sys
-
 import labtest
 from labtest.labtest import main
 from labtest.registry import Registry
 
 
-def test_subcommand_list_registry_empty(monkeypatch, capsys):
+def test_subcommand_list_registry_empty(mock_sys_argv, capsys):
     registry = Registry(is_singleton=False)
-
-    with monkeypatch.context() as m:
-        m.setattr(sys, "argv", ["main", "list"])
+    with mock_sys_argv("main", "list"):
         main(registry=registry)
         captured = capsys.readouterr()
         assert "INFO: Did not find any registered functions" in captured.out
 
 
-def test_subcommand_list_registry_one_entry(monkeypatch, capsys):
+def test_subcommand_list_registry_one_entry(mock_sys_argv, capsys):
     registry = Registry(is_singleton=False)
 
     @labtest.register(registry)
     def mock_test_subcommand_list_registry_one_entry():
         """mock_test_subcommand_list_registry_one_entry"""
 
-    with monkeypatch.context() as m:
-        m.setattr(sys, "argv", ["main", "list"])
+    with mock_sys_argv("main", "list"):
         main(registry=registry)
         captured = capsys.readouterr()
         assert (
@@ -31,7 +26,7 @@ def test_subcommand_list_registry_one_entry(monkeypatch, capsys):
         )
 
 
-def test_subcommand_list_registry_two_entries(monkeypatch, capsys):
+def test_subcommand_list_registry_two_entries(mock_sys_argv, capsys):
     registry = Registry(is_singleton=False)
 
     @labtest.register(registry)
@@ -42,8 +37,7 @@ def test_subcommand_list_registry_two_entries(monkeypatch, capsys):
     def mock_test_subcommand_list_registry_two_entries_beta():
         """mock_test_subcommand_list_registry_two_entries_beta"""
 
-    with monkeypatch.context() as m:
-        m.setattr(sys, "argv", ["main", "list"])
+    with mock_sys_argv("main", "list"):
         main(registry=registry)
         captured = capsys.readouterr()
         assert (
@@ -53,21 +47,13 @@ def test_subcommand_list_registry_two_entries(monkeypatch, capsys):
         )
 
 
-def test_subcommand_list_registry_singleton(monkeypatch, capsys):
-    registry = Registry(is_singleton=False)
+def test_subcommand_list_registry_singleton(mock_sys_argv, mock_registry, capsys):
+    with mock_registry(), mock_sys_argv("main", "list"):
 
-    class MockRegistry(Registry):
-        def __new__(cls, *_):
-            return registry
+        @labtest.register
+        def mock_test_subcommand_list_registry_singleton():
+            """mock_test_subcommand_list_registry_one_entry"""
 
-    monkeypatch.setattr(labtest.labtest, "Registry", MockRegistry)
-
-    @labtest.register(registry)
-    def mock_test_subcommand_list_registry_singleton():
-        """mock_test_subcommand_list_registry_one_entry"""
-
-    with monkeypatch.context() as m:
-        m.setattr(sys, "argv", ["main", "list"])
         main()
         captured = capsys.readouterr()
         assert (
