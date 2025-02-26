@@ -44,4 +44,3 @@ def test_registry_labtests_singleton(monkeypatch):
     assert sorted(Registry().labtests) == [
         f"{__file__}:mock_test_registry_labtests_singleton"
     ]
-
