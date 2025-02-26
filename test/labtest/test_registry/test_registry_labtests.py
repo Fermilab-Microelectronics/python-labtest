@@ -1,11 +1,19 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from labtest.registry import Registry
 
+if TYPE_CHECKING:
+    import pytest
 
-def test_registry_labtests_one_function():
-    def mock_test_registry_labtests_one_function():
+
+def test_registry_labtests_one_function() -> None:
+    registry = Registry(is_singleton=False)
+
+    def mock_test_registry_labtests_one_function() -> None:
         """mock function"""
 
-    registry = Registry(is_singleton=False)
     registry.register(mock_test_registry_labtests_one_function)
     assert len(registry.labtests) == 1
     assert sorted(registry.labtests) == [
@@ -13,14 +21,15 @@ def test_registry_labtests_one_function():
     ]
 
 
-def test_registry_labtests_two_functions():
-    def mock_test_registry_labtests_two_functions_alpha():
-        """mock function"""
-
-    def mock_test_registry_labtests_two_functions_beta():
-        """mock function"""
-
+def test_registry_labtests_two_functions() -> None:
     registry = Registry(is_singleton=False)
+
+    def mock_test_registry_labtests_two_functions_alpha() -> None:
+        """mock function"""
+
+    def mock_test_registry_labtests_two_functions_beta() -> None:
+        """mock function"""
+
     registry.register(mock_test_registry_labtests_two_functions_alpha)
     registry.register(mock_test_registry_labtests_two_functions_beta)
     assert len(registry.labtests) == 2
@@ -30,17 +39,13 @@ def test_registry_labtests_two_functions():
     ]
 
 
-def test_registry_labtests_singleton(monkeypatch):
-    def mock_test_registry_labtests_singleton():
+def test_registry_labtests_singleton(monkeypatch: pytest.MonkeyPatch) -> None:
+    registry = Registry(is_singleton=False)
+    monkeypatch.setattr(Registry, "__new__", lambda *_: registry)
+
+    def mock_test_registry_labtests_singleton() -> None:
         """mock function"""
 
-    registry = Registry(is_singleton=False)
-
-    # pylint: disable-next=unused-argument
-    def mock_new(cls, *, is_singleton: bool = True):  # noqa: ARG001
-        return registry
-
-    monkeypatch.setattr(Registry, "__new__", mock_new)
     Registry().register(mock_test_registry_labtests_singleton)
     assert len(Registry().labtests) == 1
     assert sorted(Registry().labtests) == [

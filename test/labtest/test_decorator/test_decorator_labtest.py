@@ -1,12 +1,19 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import labtest
 from labtest.registry import Registry
 
+if TYPE_CHECKING:
+    import pytest
 
-def test_decorator_labtest_one_function():
+
+def test_decorator_labtest_one_function() -> None:
     registry = Registry(is_singleton=False)
 
     @labtest.register(registry)
-    def mock_test_decorator_labtest_one_function():
+    def mock_test_decorator_labtest_one_function() -> None:
         """mock function"""
 
     assert len(registry.labtests) == 1
@@ -15,15 +22,15 @@ def test_decorator_labtest_one_function():
     ]
 
 
-def test_decorator_labtest_two_functions():
+def test_decorator_labtest_two_functions() -> None:
     registry = Registry(is_singleton=False)
 
     @labtest.register(registry)
-    def mock_test_decorator_labtest_two_functions_alpha():
+    def mock_test_decorator_labtest_two_functions_alpha() -> None:
         """mock function"""
 
     @labtest.register(registry)
-    def mock_test_decorator_labtest_two_functions_beta():
+    def mock_test_decorator_labtest_two_functions_beta() -> None:
         """mock function"""
 
     assert len(registry.labtests) == 2
@@ -33,17 +40,12 @@ def test_decorator_labtest_two_functions():
     ]
 
 
-def test_decorator_labtest_no_argument(monkeypatch):
+def test_decorator_labtest_no_argument(monkeypatch: pytest.MonkeyPatch) -> None:
     registry = Registry(is_singleton=False)
-
-    class MockRegistry(Registry):
-        def __new__(cls, *, is_singleton: bool = True):  # noqa: ARG003
-            return registry
-
-    monkeypatch.setattr(labtest.decorator, "Registry", MockRegistry)
+    monkeypatch.setattr(labtest.decorator.Registry, "__new__", lambda *_: registry)
 
     @labtest.register
-    def mock_test_decorator_labtest_no_argument():
+    def mock_test_decorator_labtest_no_argument() -> None:
         """mock function"""
 
     assert len(registry.labtests) == 1

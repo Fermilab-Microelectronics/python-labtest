@@ -2,5 +2,5 @@ import labtest
 
 
 @labtest.register
-def labtest_alpha():
+def labtest_alpha() -> str:
     return "labtest_alpha"

@@ -27,6 +27,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Renamed project to `labtest`.
 - Pylint now uses all availabe extentions by default.
+- Updated the nox control file to share virtual environment across sessions.
+- Reorganized the test files and created shared test fixtures where useful.
+- Enforcing type hints in both the source and test files.
 ### Deprecated
 ### Fixed
 - The nox session `cli` no longer runs by default and generates an error due to lack
@@ -34,4 +37,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The nox session `clean` no longer requires the creation of a virtual environment.
 - Changed the GitHub workflow badge from the `python-sample` repo to the correct
   `python-labtest` repo.
+- Adding missing test to fix implicit coverage of registry execute arguments.
 ### Security

@@ -1,41 +1,37 @@
+from __future__ import annotations
+
 import pathlib
-import sys
+from typing import TYPE_CHECKING
 
 import labtest
-from labtest.registry import Registry
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    import pytest
 
 MOCK_SOURCE_RELATIVE = "test/labtest/test_cli/mock_source"
 MOCK_SOURCE_ABSOLUTE = pathlib.Path(__file__).parents[4] / MOCK_SOURCE_RELATIVE
 
 
-def test_subcommand_list_source_empty(monkeypatch, capsys):
-    class MockRegistry(Registry):
-        def __new__(cls, *, is_singleton: bool = True):
-            """Mock Constructor"""
-
-    monkeypatch.setattr(labtest.decorator, "Registry", MockRegistry)
-
-    with monkeypatch.context() as m:
-        m.setattr(sys, "argv", ["main", "list", "--source", "empty"])
+def test_subcommand_list_source_empty(
+    mock_sys_argv: Callable, mock_registry: Callable, capsys: pytest.CaptureFixture[str]
+) -> None:
+    with mock_registry(), mock_sys_argv("main", "list", "--source", "empty"):
         labtest.labtest.main()
         captured = capsys.readouterr()
         assert "INFO: Did not find any registered functions" in captured.out
 
 
-def test_subcommand_list_source_one_path(monkeypatch, capsys):
-    registry = Registry(is_singleton=False)
-
-    class MockRegistry(Registry):
-        def __new__(cls, *, is_singleton: bool = True):  # noqa: ARG003
-            return registry
-
-    monkeypatch.setattr(labtest.decorator, "Registry", MockRegistry)
-
-    with monkeypatch.context() as m:
-        m.setattr(sys, "argv", ["main", "list", "--source", f"{MOCK_SOURCE_RELATIVE}"])
-        labtest.labtest.main(registry=registry)
+def test_subcommand_list_source_one_path(
+    mock_sys_argv: Callable, mock_registry: Callable, capsys: pytest.CaptureFixture[str]
+) -> None:
+    with (
+        mock_registry(),
+        mock_sys_argv("main", "list", "--source", f"{MOCK_SOURCE_RELATIVE}"),
+    ):
+        labtest.labtest.main()
         captured = capsys.readouterr()
-
         assert (
             f"{MOCK_SOURCE_ABSOLUTE}/alpha/alpha.py:labtest_alpha\n"
             f"{MOCK_SOURCE_ABSOLUTE}/alpha/beta/beta.py:labtest_beta_one\n"
@@ -46,29 +42,21 @@ def test_subcommand_list_source_one_path(monkeypatch, capsys):
         )
 
 
-def test_subcommand_list_source_two_paths(monkeypatch, capsys):
-    registry = Registry(is_singleton=False)
-
-    class MockRegistry(Registry):
-        def __new__(cls, *, is_singleton: bool = True):  # noqa: ARG003
-            return registry
-
-    monkeypatch.setattr(labtest.decorator, "Registry", MockRegistry)
-
-    with monkeypatch.context() as m:
-        m.setattr(
-            sys,
-            "argv",
-            [
-                "main",
-                "list",
-                "--source",
-                f"{MOCK_SOURCE_RELATIVE}/alpha/beta",
-                "--source",
-                f"{MOCK_SOURCE_RELATIVE}/alpha/gamma",
-            ],
-        )
-        labtest.labtest.main(registry=registry)
+def test_subcommand_list_source_two_paths(
+    mock_sys_argv: Callable, mock_registry: Callable, capsys: pytest.CaptureFixture[str]
+) -> None:
+    with (
+        mock_registry(),
+        mock_sys_argv(
+            "main",
+            "list",
+            "--source",
+            f"{MOCK_SOURCE_RELATIVE}/alpha/beta",
+            "--source",
+            f"{MOCK_SOURCE_RELATIVE}/alpha/gamma",
+        ),
+    ):
+        labtest.labtest.main()
         captured = capsys.readouterr()
         assert (
             f"{MOCK_SOURCE_ABSOLUTE}/alpha/beta/beta.py:labtest_beta_one\n"
