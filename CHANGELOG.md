@@ -35,4 +35,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The nox session `clean` no longer requires the creation of a virtual environment.
 - Changed the GitHub workflow badge from the `python-sample` repo to the correct
   `python-labtest` repo.
+- Adding missing test to fix implicit coverage of registry execute arguments.
 ### Security
