@@ -10,8 +10,7 @@ MOCK_SOURCE_ABSOLUTE = pathlib.Path(__file__).parents[4] / MOCK_SOURCE_RELATIVE
 
 def test_subcommand_list_source_empty(monkeypatch, capsys):
     class MockRegistry(Registry):
-        def __new__(cls, *, is_singleton: bool = True):
-            """Mock Constructor"""
+        pass
 
     monkeypatch.setattr(labtest.decorator, "Registry", MockRegistry)
 
@@ -26,7 +25,7 @@ def test_subcommand_list_source_one_path(monkeypatch, capsys):
     registry = Registry(is_singleton=False)
 
     class MockRegistry(Registry):
-        def __new__(cls, *, is_singleton: bool = True):  # noqa: ARG003
+        def __new__(cls, *_):
             return registry
 
     monkeypatch.setattr(labtest.decorator, "Registry", MockRegistry)
@@ -50,7 +49,7 @@ def test_subcommand_list_source_two_paths(monkeypatch, capsys):
     registry = Registry(is_singleton=False)
 
     class MockRegistry(Registry):
-        def __new__(cls, *, is_singleton: bool = True):  # noqa: ARG003
+        def __new__(cls, *_):
             return registry
 
     monkeypatch.setattr(labtest.decorator, "Registry", MockRegistry)
