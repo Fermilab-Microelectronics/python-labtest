@@ -18,13 +18,13 @@ def _mock_registry(monkeypatch: pytest.MonkeyPatch) -> Callable:
     registry = Registry(is_singleton=False)
 
     @contextmanager
-    def __mock_registry_context() -> Generator:
+    def _mock_registry_context() -> Generator:
         with monkeypatch.context() as m:
             m.setattr(labtest.decorator.Registry, "__new__", lambda *_: registry)
             m.setattr(labtest.labtest.Registry, "__new__", lambda *_: registry)
             yield
 
-    return __mock_registry_context
+    return _mock_registry_context
 
 
 @pytest.fixture(name="mock_sys_argv")
