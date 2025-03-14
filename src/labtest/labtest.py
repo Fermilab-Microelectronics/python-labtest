@@ -7,7 +7,6 @@ import importlib.util
 import os
 import sys
 from importlib.abc import Loader
-from importlib.machinery import ModuleSpec
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
@@ -17,6 +16,7 @@ from labtest.registry import Registry
 if TYPE_CHECKING:
     from argparse import Namespace as Args
     from collections.abc import Callable
+    from importlib.machinery import ModuleSpec
     from typing import Any
 
 
@@ -105,7 +105,7 @@ def _import_directory(directory: str) -> None:
                 module_name = os.path.split(file)[-1].strip(".py")
                 module_path = Path(root) / file
                 module_spec = cast(
-                    ModuleSpec,
+                    "ModuleSpec",
                     importlib.util.spec_from_file_location(module_name, module_path),
                 )
                 module = importlib.util.module_from_spec(module_spec)
