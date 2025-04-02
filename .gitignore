@@ -3,8 +3,8 @@
 
 # Python
 __pycache__
-*.egg-info
 .coverage*
+.python-version
+*.egg-info
 coverage*
 htmlcov
-.python-version
