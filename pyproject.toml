@@ -6,7 +6,7 @@ requires = [
 
 [project]
 dependencies = []
-description = "Python code used for testing the SUNROCK chip."
+description = "Python code for running registered functions form command line."
 name = "labtest"
 readme = "README.md"
 requires-python = ">=3.9"
